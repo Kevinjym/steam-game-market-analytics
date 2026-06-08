@@ -108,3 +108,12 @@ The model is best understood as a market research and decision-support tool, not
 * Add clearer business recommendations
 * Compare baseline and regularized regression models
 * Improve documentation and reproducibility
+
+
+## Project Background and Attribution
+
+This project was originally completed as a group coursework project during my undergraduate studies at UBC. The original analysis focused on predicting Steam games' Metacritic scores using statistical modeling techniques.
+
+This repository is a personal reconstruction and extension of the original project. I rebuilt the project into an industry-facing analytics case study by restructuring the repository, rewriting the business context, improving documentation, expanding the analysis workflow, and reframing the results for product and market analytics use cases.
+
+Credit is given to the original course project team for the initial project foundation.
