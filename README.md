@@ -53,6 +53,18 @@ Planned workflow:
 5. Build and evaluate regression models
 6. Translate model results into business insights and limitations
 
+## Skills Demonstrated
+
+- Data cleaning and preprocessing in R
+- Exploratory data analysis with tidyverse and ggplot2
+- Multiple linear regression
+- Forward variable selection
+- LASSO regression and regularization
+- Train-test split evaluation
+- RMSE-based model comparison
+- Business-oriented interpretation of statistical modeling results
+
+
 ## Initial Modeling Approach
 
 The original analysis compared multiple regression-based approaches:
@@ -64,6 +76,20 @@ The original analysis compared multiple regression-based approaches:
 Model performance was evaluated using RMSE on a test set. The original models produced RMSE values around 10.5–11 points on the 0–100 Metacritic scale.
 
 This suggests that structured metadata can provide a rough directional signal, but it is not sufficient for highly precise prediction. Important drivers of review scores may include factors not captured in the dataset, such as gameplay quality, studio reputation, marketing, technical performance, critic expectations, and launch timing.
+
+
+## Key Results
+
+| Model | Test RMSE |
+|---|---:|
+| Forward-Selected Reduced Regression | 10.202 |
+| LASSO Regression | 10.207 |
+| Full Multiple Linear Regression | 10.224 |
+
+The forward-selected reduced regression model achieved the lowest test RMSE while using only four predictors: initial price, log-transformed Steam recommendation count, release year, and Action genre indicator.
+
+Overall, the models achieved RMSE values around 10 Metacritic points, suggesting that structured Steam metadata can provide rough directional predictions but is not precise enough to accurately forecast exact critic scores.
+
 
 ## Repository Structure
 
