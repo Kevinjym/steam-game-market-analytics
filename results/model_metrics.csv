@@ -1,0 +1,5 @@
+model,rmse
+lasso_regression,9.65353356875598
+forward_selection,9.676103472263563
+reduced_linear_regression,9.67610347226388
+full_linear_regression,9.688949728672503

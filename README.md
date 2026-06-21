@@ -44,52 +44,53 @@ Key variables include:
 
 This project uses R for data cleaning, exploratory data analysis, and predictive modeling.
 
-Planned workflow:
+The workflow includes:
 
-1. Load and clean Steam game metadata
-2. Remove invalid or missing Metacritic scores
-3. Transform release date into usable time-based features
-4. Explore relationships between game attributes and Metacritic scores
-5. Build and evaluate regression models
-6. Translate model results into business insights and limitations
+1. Loading and cleaning Steam game metadata
+2. Removing invalid or missing Metacritic scores
+3. Transforming release dates into usable time-based features
+4. Exploring relationships between game attributes and Metacritic scores
+5. Building and evaluating regression models
+6. Comparing model performance using test RMSE
+7. Translating model results into business insights and limitations
 
 ## Skills Demonstrated
 
 - Data cleaning and preprocessing in R
-- Exploratory data analysis with tidyverse and ggplot2
+- Exploratory data analysis with `tidyverse` and `ggplot2`
 - Multiple linear regression
 - Forward variable selection
 - LASSO regression and regularization
 - Train-test split evaluation
 - RMSE-based model comparison
+- Reproducible analysis using modular R scripts
 - Business-oriented interpretation of statistical modeling results
 
+## Modeling Approach
 
-## Initial Modeling Approach
-
-The original analysis compared multiple regression-based approaches:
+This analysis compares multiple regression-based approaches:
 
 - Full multiple linear regression
 - Forward-selected reduced linear regression
 - LASSO regression
 
-Model performance was evaluated using RMSE on a test set. The original models produced RMSE values around 10.5–11 points on the 0–100 Metacritic scale.
-
-This suggests that structured metadata can provide a rough directional signal, but it is not sufficient for highly precise prediction. Important drivers of review scores may include factors not captured in the dataset, such as gameplay quality, studio reputation, marketing, technical performance, critic expectations, and launch timing.
-
+Model performance was evaluated using RMSE on a held-out test set. The goal was not to build a perfect prediction engine, but to evaluate whether structured Steam metadata can provide a useful directional signal for critical reception.
 
 ## Key Results
 
 | Model | Test RMSE |
 |---|---:|
-| Forward-Selected Reduced Regression | 10.202 |
-| LASSO Regression | 10.207 |
-| Full Multiple Linear Regression | 10.224 |
+| LASSO Regression | 9.654 |
+| Forward-Selected Reduced Regression | 9.676 |
+| Full Multiple Linear Regression | 9.689 |
 
-The forward-selected reduced regression model achieved the lowest test RMSE while using only four predictors: initial price, log-transformed Steam recommendation count, release year, and Action genre indicator.
+![Model RMSE Comparison](figures/model_rmse_comparison.png)
 
-Overall, the models achieved RMSE values around 10 Metacritic points, suggesting that structured Steam metadata can provide rough directional predictions but is not precise enough to accurately forecast exact critic scores.
+The LASSO regression model achieved the lowest test RMSE. However, the forward-selected reduced regression model performed nearly as well while using a simpler and more interpretable structure than the full multiple linear regression model.
 
+Overall, RMSE values around 9.6 to 9.7 Metacritic points suggest that structured Steam metadata can provide rough directional predictions, but it is not precise enough to accurately forecast exact critic scores.
+
+Important drivers of review scores may include factors not captured in the dataset, such as gameplay quality, studio reputation, marketing, technical performance, critic expectations, and launch timing.
 
 ## Repository Structure
 
@@ -110,16 +111,33 @@ steam-game-market-analytics/
 └── README.md
 ```
 
-## Tools
+## How to Reproduce This Analysis
 
-* R
-* tidyverse
-* ggplot2
-* broom
-* glmnet
-* leaps
-* caret or rsample
+From the project root directory, run the scripts in order:
 
+```bash
+Rscript scripts/01_load_clean_data.R
+Rscript scripts/02_eda.R
+Rscript scripts/03_modeling.R
+Rscript scripts/04_evaluation.R
+```
+
+Expected outputs include:
+
+- Cleaned dataset in `data/processed/`
+- EDA summaries and model results in `results/`
+- Visualizations in `figures/`
+- Final model comparison outputs from `04_evaluation.R`
+
+## Tools and Packages
+
+- R
+- `tidyverse`
+- `ggplot2`
+- `broom`
+- `caret`
+- `leaps`
+- `glmnet`
 
 ## Responsible Interpretation
 
@@ -127,19 +145,18 @@ This project should not be interpreted as a tool that can fully determine whethe
 
 The model is best understood as a market research and decision-support tool, not as a replacement for game quality assessment, user research, or expert review.
 
-## Next Steps
+## Future Improvements
 
-* Rebuild the original analysis into modular R scripts
-* Add stronger exploratory visualizations
-* Add clearer business recommendations
-* Compare baseline and regularized regression models
-* Improve documentation and reproducibility
-
+- Add more product-level features such as publisher, developer, tags, review text, and user review trends
+- Compare additional models such as random forest or gradient boosting
+- Add cross-validation beyond a single train-test split
+- Build an interactive dashboard for exploring genre, price, and release-year patterns
+- Expand the business interpretation for publisher or platform strategy use cases
 
 ## Project Background and Attribution
 
 This project was originally completed as a group coursework project during my undergraduate studies at UBC. The original analysis focused on predicting Steam games' Metacritic scores using statistical modeling techniques.
 
-This repository is a personal reconstruction and extension of the original project. I rebuilt the project into an industry-facing analytics case study by restructuring the repository, rewriting the business context, improving documentation, expanding the analysis workflow, and reframing the results for product and market analytics use cases.
+This repository is a personal reconstruction and extension of the original project. I rebuilt the project into an industry-facing analytics case study by restructuring the repository, rewriting the business context, improving documentation, expanding the analysis workflow, creating reproducible scripts, and reframing the results for product and market analytics use cases.
 
 Credit is given to the original course project team for the initial project foundation.

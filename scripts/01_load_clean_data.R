@@ -1,15 +1,17 @@
-# 01_load_clean_data.R
-# Purpose: Load raw Steam games data, perform initial cleaning, and export a cleaned dataset.
+# scripts/01_load_clean_data.R
+
+# Purpose: Load raw Steam game data, do initial cleaning, and save a cleaned dataset.
 
 library(tidyverse)
 library(lubridate)
+dir.create("data/processed", recursive = TRUE, showWarnings = FALSE)
+dir.create("results", recursive = TRUE, showWarnings = FALSE)
 
 # Load raw data
-raw_data <- read_csv("data/raw/steam_games.csv")
-
-# Basic data checks
-glimpse(raw_data)
-summary(raw_data)
+raw_data <- read_csv("data/raw/steam_games.csv", show_col_types = FALSE)
+message("Raw data loaded:")
+message("Rows: ", nrow(raw_data))
+message("Columns: ", ncol(raw_data))
 
 # Check missing values by column
 missing_summary <- raw_data %>%
@@ -21,12 +23,19 @@ missing_summary <- raw_data %>%
   ) %>%
   arrange(desc(missing_count))
 
-print(missing_summary)
+write_csv(missing_summary, "results/missing_value_summary.csv")
 
 # Metacritic = 0 likely means score unavailable, not an actual critic score.
 # Keep only games with valid Metacritic scores for modeling.
-clean_data <- raw_data %>%
-  filter(Metacritic > 0) %>%
+
+
+valid_metacritic_data <- raw_data %>%
+  filter(!is.na(Metacritic), Metacritic > 0)
+
+
+## Parse release date and extract year, convert IsFree to logical, and ensure genre columns are logical.
+
+clean_data <- valid_metacritic_data %>%
   mutate(
     ReleaseDateParsed = mdy(ReleaseDate),
     ReleaseYear = year(ReleaseDateParsed),
@@ -51,13 +60,16 @@ cleaning_summary <- tibble(
   value = c(
     nrow(raw_data),
     ncol(raw_data),
-    nrow(raw_data %>% filter(Metacritic > 0)),
+    nrow(valid_metacritic_data),
     nrow(clean_data),
-    nrow(raw_data) - nrow(raw_data %>% filter(Metacritic > 0)),
-    nrow(raw_data %>% filter(Metacritic > 0)) - nrow(clean_data)
+    nrow(raw_data) - nrow(valid_metacritic_data),
+    nrow(valid_metacritic_data) - nrow(clean_data)
   )
 )
 
 write_csv(cleaning_summary, "results/cleaning_summary.csv")
 
-print(cleaning_summary)
+message("Cleaning complete.")
+message("Cleaned rows: ", nrow(clean_data))
+message("Saved cleaned data to data/processed/steam_games_clean.csv")
+message("Saved cleaning summary to results/cleaning_summary.csv")

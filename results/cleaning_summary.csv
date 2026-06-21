@@ -1,0 +1,7 @@
+metric,value
+raw_rows,12624
+raw_columns,19
+valid_metacritic_rows,2267
+cleaned_rows,2255
+removed_due_to_metacritic_zero_or_missing,10357
+removed_due_to_invalid_release_date,12
